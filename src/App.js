@@ -15,7 +15,7 @@ function InterestedStar(props) {
 	 if (props.value.interested)
 		  source = "favorite.png";
 	 return (
-		  <input type="image" class="favorite-star" onClick={props.onClick} src={source} />
+		  <input type="image" alt="Click to show interest in school." class="favorite-star" onClick={props.onClick} src={source} />
 	 );
 }
 
@@ -25,7 +25,7 @@ class SchoolCard extends React.Component {
 		  return (
 				<table class="tg greedy-width">
 					 <tr>
-						  <th class="tg th" rowspan="2"><img class="card-school-picture" src={this.props.picture} /></th>
+						  <th class="tg th" rowspan="2"><img alt="{this.props.name}" class="card-school-picture" src={this.props.picture} /></th>
 						  <th class="tg th greedy-width">{this.props.name} <br /> {this.props.interestedCnt} Interested </th>
 						  <th class="tg th favorite-star"><InterestedStar value={this.props} onClick={() => this.props.onClick(this.props)} /></th>
 					 </tr>
@@ -46,35 +46,34 @@ class SearchResults extends React.Component {
 		  };
 	 }
 
-	 onClick(cardKey) {
+	 onClick(cardId) {
 		  const cards = this.state.schoolCards.slice();
-		  var keys = cards.map(function (card) { return card[5]; });
-		  var idx = keys.indexOf(cardKey);
-		  cards[idx][3] = !cards[idx][3];
+		  var ids = cards.map(function (card) { return card.id; });
+		  var idx = ids.indexOf(cardId);
+		  cards[idx].isInterested = !cards[idx].isInterested;
 		  this.setState({ cards: cards });
 	 }
 
 	 renderSchoolCard(card) {
 		  return (
-				<SchoolCard key={card[5]}
-					 picture={card[0]}
-					 name={card[1]}
-					 description={card[2]}
-					 interested={card[3]}
-					 interestedCnt={card[4]}
-					 onClick={() => this.onClick(card[5])}
+				<SchoolCard id={card.id}
+					 picture={card.picture}
+					 name={card.name}
+					 description={card.description}
+					 interested={card.isInterested}
+					 interestedCnt={card.interestedCnt}
+					 onClick={() => this.onClick(card.id)}
 				/>
 		  );
 	 }
 
 	 render() {
-		  const schoolCards = this.state.schoolCards;
-		  const listItems = this.state.schoolCards.map((card) =>
+		  const schoolCards = this.state.schoolCards.map((card) =>
 				<li>{this.renderSchoolCard(card)}</li>
 		  );
 
 		  return (
-				<ul>{listItems}</ul>
+				<ul>{schoolCards}</ul>
 		  );
 	 }
 }
@@ -90,9 +89,12 @@ class Details extends React.Component {
 }
 
 function App() {
-	 const seedData = [["clarksburg.png", "Clarksburg High School", "To Provide a blah blah blah", true, 15, 1],
-	 ["montgomery.png", "Montgomery Elementary School", "Home of the Mountain Lions", false, 9, 2],
-	 ["lorem.png", "Lorem Ipsum Middle", "Lorem Ipsum dolor sit amet, consectetur blah blah", false, 0, 3]];
+	 const seedData = [{id: 1, name: "Clarksburg High School", picture: "clarksburg.png", 
+						description: "To Provide a blah blah blah", isInterested: true, interestCnt: 15},
+					   {id: 2, name: "Montgomery Elementary School", picture: "montgomery.png", 
+						description: "Home of the Mountain Lions", isInterested: false, interestCnt: 9},
+					   {id: 3, name: "Lorem Ipsum Middle", picture: "lorem.png", 
+						description: "Lorem Ipsum dolor sit amet, consectetur blah blah", isInterested: false, interestCnt: 0}];
 
 	 return (
 

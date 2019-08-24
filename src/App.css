@@ -29,6 +29,10 @@
 	 width: 100%;
 }
 
+ul {
+  list-style-type: none;
+}
+
 .tg {
 	border-collapse: collapse;
 	border-spacing: 0;
